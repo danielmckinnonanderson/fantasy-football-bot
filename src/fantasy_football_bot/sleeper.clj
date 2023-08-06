@@ -9,7 +9,7 @@
 
 (defn sleeper-get-user
   "Request Sleeper user data for the supplied user name or user ID.
-   Evaluates to the HTTP response from Sleeper (in Ring format)"
+   Evaluates to the body of the HTTP response from Sleeper, as a map"
   [user-id]
   (->> user-id
        (str sleeper-user-url)
@@ -19,7 +19,7 @@
 
 (defn sleeper-get-league
   "Request Sleeper league data for the supplied league ID.
-   Evaluates to the HTTP response from Sleeper (in Ring format)"
+   Evaluates to the body of the response from Sleeper, as a map"
   [league-id]
   (->> league-id
        (str sleeper-league-url)
