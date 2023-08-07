@@ -4,4 +4,5 @@
             [vars]))
 
 
-(sleeper/sleeper-get-rosters vars/my-league)
+(sleeper/get-rosters vars/my-league)
+
