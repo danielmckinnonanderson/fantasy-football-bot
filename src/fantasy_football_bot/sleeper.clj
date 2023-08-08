@@ -1,5 +1,6 @@
 (ns fantasy-football-bot.sleeper
   (:require [clojure.pprint :as pprint]
+            [clojure.string :as string]
             [clj-http.client :as client]
             [fantasy-football-bot.json :as json]))
 
@@ -47,7 +48,7 @@
   "USE SPARINGLY. Response size is huge, roughly 5MB.
    Request data for all unique NFL players according to Sleeper.
    Includes all players that Sleeper has ever tracked, including retired / inactive players from yesteryear.
-   Evaluates to the body of the response from Sleeper, a huge map where keys are the unique player ID's."
+   Evaluates to the body of the response from Sleeper, as an unprocessed string"
   []
   (-> nfl-players-url
       client/get
@@ -81,8 +82,26 @@
         (map (fn [roster] [(:owner_id roster) (:starters roster)])
              rosters)))
 
+(defn injury-status [player all-players]
+  (:injury_status (player all-players))
+  #_(if (:injury_status (player all-players))
+      #_(:injury_status (player all-players))
+      #_nil))
+
+
+(defn starters-map-to-injured-starters
+  "Transform into a map of keys owner_id (string) and values list of {:player_id :injury_status :status} for each injured starter.
+   Only puts :owner_id key into the result if they have >= 1 injured player"
+  [all-starters all-players]
+  (into {} 
+        ;; One specific fantasy team's starters
+        #_(map (fn [starters] [(not (nil? (injury-status)))]
+                all-starters)))) 
+
+
 (defn starting-inactive?
   "Predicate indicating whether a provided roster map is starting a player who is inactive, according to the evaluator func.
    Evaluates to a list of the players who are starting despite being inactive"
   [roster all-players evaluator]
-  (evaluator roster))
+  (evaluator [roster all-players]))
+
