@@ -48,7 +48,7 @@
   "USE SPARINGLY. Response size is huge, roughly 5MB.
    Request data for all unique NFL players according to Sleeper.
    Includes all players that Sleeper has ever tracked, including retired / inactive players from yesteryear.
-   Evaluates to the body of the response from Sleeper, as an unprocessed string"
+   Evaluates to the body of the response from Sleeper, as a map with :<integer> player ID as keys"
   []
   (-> nfl-players-url
       client/get
@@ -81,12 +81,6 @@
   (into {} 
         (map (fn [roster] [(:owner_id roster) (:starters roster)])
              rosters)))
-
-(defn injury-status [player all-players]
-  (:injury_status (player all-players))
-  #_(if (:injury_status (player all-players))
-      #_(:injury_status (player all-players))
-      #_nil))
 
 
 (defn starters-map-to-injured-starters
